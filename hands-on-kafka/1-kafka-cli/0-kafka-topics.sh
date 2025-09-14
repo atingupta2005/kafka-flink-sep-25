@@ -1,15 +1,16 @@
 /usr/local/kafka/bin/kafka-topics.sh 
 
+export BS_SERVER="4.245.192.219:9092"
 /usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --list 
 
 /usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --topic first_topic --create
 
 /usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --topic second_topic --create --partitions 3
 
-/usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --topic third_topic --create --partitions 3 --replication-factor 2
+/usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --topic third_topic --create --partitions 3 --replication-factor 4
 
 # Create a topic (working)
-/usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --topic third_topic --create --partitions 3 --replication-factor 1
+/usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --topic third_topic --create --partitions 3 --replication-factor 2
 
 # List topics
 /usr/local/kafka/bin/kafka-topics.sh --bootstrap-server $BS_SERVER --list 
