@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="kafka-basics/src/main/java"/>
+	<classpathentry kind="lib" path="build/libs/kafka-java-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="kafka-basics/build/libs/kafka-basics-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="output" path="kafka-basics/build/classes/java/main"/>
+</classpath>
