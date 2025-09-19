@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.github.davidmc24.gradle.plugin.avro" version "1.2.0"
 }
 
 group 'io.conduktor.demos'
@@ -7,19 +8,30 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
 }
 
 dependencies {
 
-    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    // Kafka Clients
     implementation 'org.apache.kafka:kafka-clients:3.3.1'
 
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    // Confluent Kafka Avro Serializer (includes Schema Registry client)
+    implementation 'io.confluent:kafka-avro-serializer:7.4.0'
+
+    // Apache Avro library
+    implementation 'org.apache.avro:avro:1.10.2'
+
+    // SLF4J API and simple logger for logging
     implementation 'org.slf4j:slf4j-api:1.7.36'
-
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     implementation 'org.slf4j:slf4j-simple:1.7.36'
+}
 
+avro {
+    source("src/main/avro")
+    outputDir = file("src/main/java")
 }
 
 test {
