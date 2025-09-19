@@ -56,14 +56,59 @@ Producers can evolve their schema as long as it adheres to compatibility rules. 
 }
 ```
 
+This is an Avro schema definition in JSON format. It describes the structure of data for a record type named `User`. Here is a breakdown of the schema's components:
 
-### Step 2: Generate Java Classes from Avro Schema
+* **`namespace`**: `com.example`
+    * This is a string that specifies the logical namespace for the schema. It's similar to a Java package or a C++ namespace. When Avro generates code from this schema, this namespace is used to define the package or class location, preventing naming conflicts.
 
-Using the Avro Maven plugin or `avro-tools` CLI, generate Java classes from the `.avsc` file:
+* **`type`**: `record`
+    * This is the schema's overall type. The value `record` indicates that this schema defines a complex data structure that is a collection of named fields.
 
-```bash
-java -jar avro-tools-1.10.2.jar compile schema user.avsc ./src/main/java
-```
+* **`name`**: `User`
+    * This is the name of the record type being defined. The full name of the record is the combination of the namespace and the name, which would be `com.example.User`. This name is used to refer to this schema.
+
+* **`fields`**: An array of objects, where each object defines a field within the `User` record. Each field has a `name` and a `type`.
+
+    * **First Field**: `{"name": "name", "type": "string"}`
+        * **`name`**: `name`
+        * **`type`**: `string`
+        * This field is named `name` and it can only contain a string value.
+
+    * **Second Field**: `{"name": "favorite_number", "type": ["int", "null"]}`
+        * **`name`**: `favorite_number`
+        * **`type`**: `["int", "null"]`
+        * This field is named `favorite_number`. The type is an array `["int", "null"]`, which is an Avro-specific syntax for a **union**. This means the field can hold either an integer (`int`) or be `null`. The first type listed in the union is the default or preferred type.
+
+    * **Third Field**: `{"name": "favorite_color", "type": ["string", "null"]}`
+        * **`name`**: `favorite_color`
+        * **`type`**: `["string", "null"]`
+        * This field is named `favorite_color`. Similar to the previous field, its type is a union. It can hold either a string (`string`) or be `null`.
+
+In summary, this schema describes a `User` object that must have a `name` (a string), and optionally can have a `favorite_number` (an integer or null) and a `favorite_color` (a string or null). The use of `null` in a union is the standard Avro way to define optional fields.
+
+### Step 2: Integrate Avro Schema Generation in Gradle
+
+Since you are using a Gradle project in IntelliJ IDEA, the best approach is to use a Gradle plugin to automatically generate Java classes from your Avro schema during the build process.
+
+1.  **Add the Avro Plugin to Your `build.gradle` file**:
+    Add the `com.github.davidmc24.gradle.plugin.avro` plugin and the core Avro dependency to your `build.gradle` file. This tells Gradle to handle the schema compilation automatically.
+
+    ```gradle
+    plugins {
+        id 'java'
+        id 'com.github.davidmc24.gradle.plugin.avro' version '1.9.1'
+    }
+
+    dependencies {
+        implementation 'org.apache.avro:avro:1.11.1'
+    }
+    ```
+
+2.  **Place Your Avro Schema**:
+    Place your Avro schema file (`user.avsc`) in the standard schema directory, which is `src/main/avro`.
+
+3.  **Generate Classes from IntelliJ IDEA**:
+    The plugin adds a new task to your Gradle project. To generate the Java classes, open the **Gradle tool window** in IntelliJ IDEA, navigate to `Tasks > avro`, and double-click the **`generateAvroJava`** task. The generated classes will be compiled and made available for use in your project.
 
 
 ### Step 3: Configure Producer and Consumer to use Schema Registry
