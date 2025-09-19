@@ -31,7 +31,7 @@ public class ConsumerDemoWithShutdown {
         Properties properties = new Properties();
 
         // Kafka broker address to connect to
-        properties.setProperty("bootstrap.servers", "52.171.63.91:9092");
+        properties.setProperty("bootstrap.servers", "4.245.192.219:9092");
 
         // Deserializer classes to convert byte arrays to String for key and value
         properties.setProperty("key.deserializer", StringDeserializer.class.getName());

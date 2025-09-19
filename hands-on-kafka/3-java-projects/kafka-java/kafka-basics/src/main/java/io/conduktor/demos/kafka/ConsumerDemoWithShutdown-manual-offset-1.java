@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerDemoWithShutdown {
+public class ConsumerDemoWithShutdownmanualoffset1. {
 
     private static final Logger log = LoggerFactory.getLogger(ConsumerDemoWithShutdown.class.getSimpleName());
 
@@ -25,7 +25,7 @@ public class ConsumerDemoWithShutdown {
         Properties properties = new Properties();
 
         // Kafka broker address
-        properties.setProperty("bootstrap.servers", "52.171.63.91:9092");
+        properties.setProperty("bootstrap.servers", "4.245.192.219:9092");
         // Deserializer classes for key/value
         properties.setProperty("key.deserializer", StringDeserializer.class.getName());
         properties.setProperty("value.deserializer", StringDeserializer.class.getName());

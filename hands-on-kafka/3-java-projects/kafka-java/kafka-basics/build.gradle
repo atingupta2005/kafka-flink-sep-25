@@ -30,8 +30,7 @@ dependencies {
 }
 
 avro {
-    source("src/main/avro")
-    outputDir = file("src/main/java")
+
 }
 
 test {

@@ -21,7 +21,7 @@ public class ProducerDemoWithCallback {
         Properties properties = new Properties();
 
         // Specify the Kafka broker(s) address to connect to
-        properties.setProperty("bootstrap.servers", "52.171.63.91:9092");
+        properties.setProperty("bootstrap.servers", "4.245.192.219:9092");
 
         // Key serializer class to convert keys to byte arrays
         properties.setProperty("key.serializer", StringSerializer.class.getName());

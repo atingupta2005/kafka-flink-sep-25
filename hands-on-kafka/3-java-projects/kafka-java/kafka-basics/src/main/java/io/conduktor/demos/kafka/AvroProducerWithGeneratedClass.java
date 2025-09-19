@@ -17,10 +17,10 @@ public class AvroProducerWithGeneratedClass {
         String topic = "demo_java_avro";
 
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "52.171.63.91:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "4.245.192.219:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class.getName());
-        props.put("schema.registry.url", "http://52.171.63.91:8081");
+        props.put("schema.registry.url", "http://4.245.192.219:8081");
 
         KafkaProducer<String, User> producer = new KafkaProducer<>(props);
 

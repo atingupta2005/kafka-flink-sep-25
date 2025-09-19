@@ -26,8 +26,8 @@ public class ConsumerDemoCooperative {
         // create Producer Properties
         Properties properties = new Properties();
 
-        // connect to 52.171.63.91
-        properties.setProperty("bootstrap.servers", "52.171.63.91:9092");
+        // connect to 4.245.192.219
+        properties.setProperty("bootstrap.servers", "4.245.192.219:9092");
 
 
         // create consumer configs
