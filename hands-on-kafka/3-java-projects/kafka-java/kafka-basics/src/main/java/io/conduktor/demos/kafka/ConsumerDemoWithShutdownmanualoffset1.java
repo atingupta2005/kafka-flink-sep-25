@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class ConsumerDemoWithShutdownmanualoffset1. {
+public class ConsumerDemoWithShutdownmanualoffset1 {
 
     private static final Logger log = LoggerFactory.getLogger(ConsumerDemoWithShutdown.class.getSimpleName());
 
