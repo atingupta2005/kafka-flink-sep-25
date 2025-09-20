@@ -1,5 +1,9 @@
 # 🧪 ksqlDB End-to-End
 
+```
+docker exec -it ksqldb-server ksql http://localhost:8088
+```
+
 ---
 
 ## 🔹 Step 1: Create Tables & Streams (Topics auto-created)
