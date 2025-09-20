@@ -2,7 +2,7 @@
 
 ---
 
-## 1. Idempotent Producer with Detailed Comments
+## 1. Idempotent Producer
 
 ```java
 import org.apache.kafka.clients.producer.KafkaProducer;
