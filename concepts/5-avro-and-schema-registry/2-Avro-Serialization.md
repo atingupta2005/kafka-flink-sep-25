@@ -41,12 +41,6 @@ Use Avro Gradle plugin or Avro tools CLI to automatically generate Java classes 
 ./gradlew generateAvroJava
 ```
 
-- CLI:
-
-```
-java -jar avro-tools-1.11.1.jar compile schema src/main/avro/io/conduktor/demos/kafka/User.avsc src/main/java
-```
-
 
 Generated classes include getters, setters, builders, and schema metadata.
 

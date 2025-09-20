@@ -14,6 +14,11 @@ key.converter=org.apache.kafka.connect.storage.StringConverter
 value.converter=org.apache.kafka.connect.storage.StringConverter
 ```
 
+```
+listeners=http://:8084
+```
+
+
 
 ```
 /usr/local/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic my_file_connect_topic_1 --replication-factor 3 --partitions 3
