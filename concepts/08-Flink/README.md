@@ -207,8 +207,3 @@ docker exec -it <container-id> flink run /opt/flink/wordcount.jar
 |                             | (Low latency)                  |
 +-----------------------------+
 ```
-
-### JobManager & TaskManager Diagram
-
-![svg](data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjE1MCIgd2lkdGg9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB4PSIxMCIgeT0iMTAiIHdpZHRoPSIyMjAiIGhlaWdodD0iNTAlIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJsaWdodGdyZXkiLz48dGV4dCB4PSI1NiIgeT0iMzAiIGZvbnQtc2l6ZT0iMTYiIGZpbGw9ImJsYWNrIj5KdWJNYW5hZ2VyPC90ZXh0PjxsaW5lIHgxPSIxMTAiIHkxPSI1MCIgeDI9IjQyNSIgeTI9IjUwIiBzdHJva2U9ImJsYWNrIi8+PHJlY3QgeD0iMTAiIHk9IjYwIiB3aWR0aD0iMjIwIiBoZWlnaHQ9IjUyIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJsaWdodGdyZXkiLz48dGV4dCB4PSIzIiB5PSI4MSIgZm9udC1zaXplPSIxNiIgZmlsbD0iYmxhY2siPlRhc2tNYW5hZ2Vy
-
