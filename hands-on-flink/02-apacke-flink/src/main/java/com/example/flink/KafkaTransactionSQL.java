@@ -2,9 +2,13 @@ package com.example.flink;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
+import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
@@ -22,6 +26,23 @@ public class KafkaTransactionSQL {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+
+        // 1. Checkpointing Configuration
+        // Enable checkpointing every 60 seconds
+        env.enableCheckpointing(60000, CheckpointingMode.EXACTLY_ONCE);
+        // Set the state backend (e.g., in-memory for testing, RocksDB for production)
+        env.setStateBackend(new HashMapStateBackend());
+        // Configure checkpointing behavior
+        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+        env.getCheckpointConfig().setMinPauseBetweenCheckpoints(5000);
+        env.getCheckpointConfig().setTolerableCheckpointFailureNumber(3);
+        env.getCheckpointConfig().setExternalizedCheckpointCleanup(
+                CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+        // Enable a fixed delay restart strategy
+        env.setRestartStrategy(RestartStrategies.fixedDelayRestart(
+                3, // number of restart attempts
+                java.time.Duration.ofMinutes(1) // delay
+        ));
 
         // Kafka configuration inline
         String bootstrapServers = "4.245.192.219:9092,4.245.192.219:9093,4.245.192.219:9094";
@@ -102,7 +123,6 @@ public class KafkaTransactionSQL {
                         .withTimestampAssigner((tx, ts) -> tx.timestamp)
                         .withIdleness(java.time.Duration.ofMinutes(1))
         );
-
 
         // Side output tag for late events
         final OutputTag<Transaction> lateTag = new OutputTag<Transaction>("late-transactions") {
