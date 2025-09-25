@@ -1,10 +1,5 @@
 # Install Apache Flink on OpenShift using Flink Kubernetes Operator
 
-This guide shows how to deploy **Apache Flink 1.17** on OpenShift using the **Flink Kubernetes Operator (1.12.0, community)**.
-We’ll install the operator, deploy a **Flink Session Cluster**, open the Flink UI, and cover basic troubleshooting.
-
----
-
 ## Install the Operator
 
 1. Log in to OpenShift Web Console.
@@ -25,9 +20,9 @@ We’ll install the operator, deploy a **Flink Session Cluster**, open the Flink
 
 ## Create a Project
 
-1. Go to **Home → Projects → Create Project**.
-2. Name it: `flink`.
-3. Switch to the `flink` project.
+```bash
+oc new-project flink
+```
 
 ---
 
@@ -41,20 +36,20 @@ oc adm policy add-role-to-user edit system:serviceaccount:flink:default -n flink
 
 ## Deploy a Flink Cluster
 
-1. Go to **Operators → Installed Operators → Flink Kubernetes Operator → FlinkDeployment**.
-2. Click **Create → YAML view**.
-3. Paste this YAML:
+Create `flink-deployment.yaml`:
 
 ```yaml
 apiVersion: flink.apache.org/v1beta1
 kind: FlinkDeployment
 metadata:
-  name: flink-session
+  name: flink-standalone
   namespace: flink
 spec:
-  image: flink:1.17
+  mode: standalone
   flinkVersion: v1_17
-  serviceAccount: default
+  image: flink:1.17.2-scala_2.12
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "2"
   jobManager:
     replicas: 1
     resource:
@@ -65,44 +60,40 @@ spec:
     resource:
       cpu: 1
       memory: 2048m
-  flinkConfiguration:
-    taskmanager.numberOfTaskSlots: "2"
+  serviceAccount: default
 ```
 
-4. Click **Create**.
+Apply:
+
+```bash
+oc apply -f flink-deployment.yaml
+```
 
 ---
 
 ## Verify Deployment
 
-* Go to **Workloads → Pods** in `flink` project:
+```bash
+oc get pods -n flink
+oc get flinkdeployment flink-standalone -n flink -o yaml | grep lifecycleState:
+```
 
-  * Expect 1 JobManager pod, 2 TaskManager pods.
-  * All should be **Running**.
-
-* Go to **Operators → Flink Kubernetes Operator → FlinkDeployment**.
-
-  * Click `flink-session` → status should show **READY** or **STABLE**.
+* Expect 1 **JobManager pod** + 2 **TaskManager pods**.
+* Status should show: `STABLE`.
 
 ---
 
 ## Access Flink UI
 
-1. In **Networking → Services**, find `flink-session-rest`.
-2. Click **Actions → Create Route**.
+Expose service:
 
-   * Name: `flink-ui`
-   * Target Port: `8081`
-3. Save.
-4. Copy the Route URL and open in browser → Flink Web Dashboard.
+```bash
+oc get svc -n flink
+oc expose svc flink-standalone-rest -n flink
+oc get route -n flink
+```
 
----
-
-## Test Flink
-
-1. Go to the Flink Web UI.
-2. Upload a job JAR
-3. Submit and run → monitor via UI.
+Open the route in your browser → Flink Web Dashboard.
 
 ---
 
@@ -110,83 +101,83 @@ spec:
 
 ---
 
-## Check Pods
+## Pods & Logs
 
 ```bash
 oc get pods -n flink
-oc describe pod <pod-name> -n flink
-oc logs pod/<pod-name> -n flink
+oc describe pod <pod> -n flink
+oc logs <pod> -n flink --tail=100 -f
 ```
-
-* **CrashLoopBackOff** → check container logs.
-* **Pending** → check events (`oc describe pod`) → may be storage or resource issue.
 
 ---
 
-## Check Services & Routes
+## Events
 
 ```bash
-oc get svc -n flink
-oc describe svc flink-session-rest -n flink
-oc get route -n flink
+oc get events -n flink --sort-by=.metadata.creationTimestamp | tail -n 50
 ```
-
-* If no external route → create manually:
-
-  ```bash
-  oc expose svc flink-session-rest -n flink
-  oc get route -n flink
-  ```
 
 ---
 
-## Debug Permission Issues
+## Operator Logs
 
-* Check RoleBindings in the project:
+```bash
+oc logs -n openshift-operators deploy/flink-kubernetes-operator --tail=100 -f
+```
+
+---
+
+## FlinkDeployment Status
+
+```bash
+oc get flinkdeployment -n flink
+oc describe flinkdeployment flink-standalone -n flink
+oc get flinkdeployment flink-standalone -n flink -o yaml
+```
+
+Look at `.status.lifecycleState` (`STABLE`, `DEPLOYING`, `FAILED`).
+
+---
+
+## Permissions Debug
 
 ```bash
 oc get rolebinding -n flink
+oc get sa -n flink
 ```
 
-* If you missed giving `edit` role to default SA, fix:
+If missing permissions:
 
 ```bash
 oc adm policy add-role-to-user edit system:serviceaccount:flink:default -n flink
 ```
 
-* If still errors, patch the FlinkDeployment to set serviceAccount explicitly:
+---
+
+## Network & UI Debug
 
 ```bash
-oc patch flinkdeployment flink-session -n flink --type=merge -p '{"spec":{"serviceAccount":"default"}}'
+oc get svc -n flink
+oc describe svc flink-standalone-rest -n flink
+oc get route -n flink
+curl http://<flink-route>/config
 ```
 
 ---
 
-## Debug FlinkDeployment
+## Common Issues
 
-```bash
-oc get flinkdeployment -n flink
-oc describe flinkdeployment flink-session -n flink
-oc get flinkdeployment flink-session -n flink -o yaml
-```
-
-* Look at `status.lifecycleState` → should be `STABLE`.
-* If `DEPLOY_FAILED`, check JobManager pod logs.
-
----
-
-## Common Problems
-
-* **Pods Pending** → Not enough CPU/memory, or storage class not available.
-* **Permission denied** → Default SA missing `edit` role. Fix with `oc adm policy add-role-to-user`.
-* **UI not reachable** → Route missing. Use `oc expose svc flink-session-rest -n flink`.
-* **Job stuck** → Check TaskManager pod logs.
+* **Pods Pending** → Not enough CPU/memory. Adjust resources.
+* **Startup probe failed** → Wrong image. Use official Flink images.
+* **Permission denied** → SA missing `edit` role.
+* **UI not reachable** → Route missing; recreate with `oc expose`.
+* **No TaskManagers** → Check `taskManager.replicas`, operator logs, and pod events.
 
 ---
 
 ## Cleanup
 
 ```bash
-oc delete flinkdeployment flink-session -n flink
+oc delete flinkdeployment flink-standalone -n flink
 oc delete project flink
 ```

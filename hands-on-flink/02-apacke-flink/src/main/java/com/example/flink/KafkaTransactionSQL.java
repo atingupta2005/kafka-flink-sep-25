@@ -1,4 +1,6 @@
 package com.example.flink;
+import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.util.Collector; // (needed if you later use ProcessFunction, not for this case)
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -42,7 +44,7 @@ public class KafkaTransactionSQL {
         // Enable a fixed delay restart strategy
         // Kafka configuration inline
         //String bootstrapServers = "4.245.192.219:9092,4.245.192.219:9093,4.245.192.219:9094";
-        String bootstrapServers = "20.213.222.81:9094,20.213.222.81:9094";
+        String bootstrapServers = "4.198.158.200:9094,4.198.158.200:9094";
         String inputTopic = "transactions-in";
         String summaryTopic = "transactions-summary";
         String lateEventsTopic = "transactions-late";
@@ -150,12 +152,34 @@ public class KafkaTransactionSQL {
                 .addSink(lateProducer);
 
         // Emit periodic processing time heartbeat messages every second
-        env.fromSequence(1, Long.MAX_VALUE)
-                .map(i -> "ProcessingTime Heartbeat @ " + new Date())
-                .returns(String.class)
-                .setParallelism(1)
-                .addSink(heartbeatProducer)
-                .setParallelism(1);
+// Emit processing-time heartbeat every 10 seconds
+        DataStream<String> heartbeats = env.addSource(new SourceFunction<String>() {
+            private static final long serialVersionUID = 1L;
+            private volatile boolean running = true;
+
+            @Override
+            public void run(SourceContext<String> ctx) throws Exception {
+                while (running) {
+                    synchronized (ctx.getCheckpointLock()) {
+                        ctx.collect("ProcessingTime Heartbeat @ " + new Date());
+                    }
+                    try {
+                        Thread.sleep(10_000L); // 10 seconds
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void cancel() {
+                running = false;
+            }
+        }).setParallelism(1);
+
+        heartbeats.addSink(heartbeatProducer).setParallelism(1);
+
 
         env.execute("Enhanced Kafka Transaction Pipeline (Event + Processing Time)");
     }

@@ -111,7 +111,7 @@ oc get pods -A
 ### Check events
 
 ```bash
-oc get events -A --sort-by=.metadata.creationTimestamp
+oc get events -A --sort-by=.metadata.creationTimestamp --watch | tail -n 100
 ```
 
 ---
