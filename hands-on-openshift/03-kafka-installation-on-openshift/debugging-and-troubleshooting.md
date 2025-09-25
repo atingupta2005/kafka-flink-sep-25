@@ -40,6 +40,12 @@
 
 If allowed to use CLI:
 
+```
+oc get ns
+oc get po -n openshift-operators
+oc logs -f amq-streams-cluster-operator-v3.0.1-1-58fdc64fc5-pc5lm -n openshift-operators
+```
+
 ```bash
 # check pods
 oc get pods -n kafka
