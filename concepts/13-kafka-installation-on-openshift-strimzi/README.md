@@ -1,4 +1,4 @@
-# Deploying Apache Kafka on Azure Red Hat OpenShift
+# Deploying Apache Kafka 3 with Zookeeper on Azure Red Hat OpenShift using strimzi Operator
 
 ---
 
@@ -9,6 +9,9 @@
 1. Go to: [https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/)
 2. Download the archive for your OS (Windows, Mac, Linux).
 3. Extract it and place the `oc` binary in your PATH.
+ - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-windows.zip
+  - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
+  - https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-mac.tar.gz
 
 ### 1.2 Connect to OpenShift with `oc`
 
@@ -101,7 +104,7 @@ spec:
 
 ---
 
-## 5. Create a Kafka Client Pod (Web UI)
+## 5. Create a Kafka Client Pod
 
 1. Go to **Workloads → Deployments → Create Deployment**.
 2. Switch to **YAML view**.

@@ -4,7 +4,7 @@
 
 * **Azure Subscription** with enough **vCPU quota** (≈ 44 cores initially).
 * **Permissions**: You must be **Owner** or **Contributor + User Access Administrator** on the subscription.
-* **Red Hat Pull Secret** (recommended) – download from [cloud.redhat.com/openshift/install/azure](https://cloud.redhat.com/openshift/install/azure).
+* **Red Hat Pull Secret** (recommended) – download from [https://console.redhat.com/openshift/downloads#tool-pull-secret](https://console.redhat.com/openshift/downloads#tool-pull-secret).
 * Decide on **region, resource group, VNet, subnets, and cluster name**.
 
 ---
@@ -23,21 +23,7 @@
 
 ---
 
-### Step 2: Create Networking
-
-1. Go to **Virtual Networks** → **Create**.
-2. Define:
-
-   * Address space (e.g., `10.0.0.0/22`).
-   * Two empty subnets:
-
-     * `master-subnet` (`10.0.0.0/23`)
-     * `worker-subnet` (`10.0.2.0/23`)
-3. Save the VNet.
-
----
-
-### Step 3: Create an ARO Cluster
+### Step 2: Create an ARO Cluster
 
 1. In the portal search bar, type **Azure Red Hat OpenShift** → **Create**.
 2. Fill in:
@@ -49,7 +35,7 @@
 
 ---
 
-### Step 4: Access the Cluster
+### Step 3: Access the Cluster
 
 1. Once provisioned, go to the cluster resource in the portal.
 2. Copy the **OpenShift Console URL**.
