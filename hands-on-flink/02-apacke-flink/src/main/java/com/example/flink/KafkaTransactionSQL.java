@@ -18,6 +18,7 @@ import org.apache.flink.streaming.connectors.kafka.KafkaSerializationSchema;
 import org.apache.flink.util.OutputTag;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+
 import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.Properties;
@@ -39,13 +40,9 @@ public class KafkaTransactionSQL {
         env.getCheckpointConfig().setExternalizedCheckpointCleanup(
                 CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         // Enable a fixed delay restart strategy
-        env.setRestartStrategy(RestartStrategies.fixedDelayRestart(
-                3, // number of restart attempts
-                java.time.Duration.ofMinutes(1) // delay
-        ));
-
         // Kafka configuration inline
-        String bootstrapServers = "4.245.192.219:9092,4.245.192.219:9093,4.245.192.219:9094";
+        //String bootstrapServers = "4.245.192.219:9092,4.245.192.219:9093,4.245.192.219:9094";
+        String bootstrapServers = "20.213.222.81:9094,20.213.222.81:9094";
         String inputTopic = "transactions-in";
         String summaryTopic = "transactions-summary";
         String lateEventsTopic = "transactions-late";

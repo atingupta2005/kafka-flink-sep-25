@@ -9,7 +9,8 @@ import java.util.concurrent.ExecutionException;
 
 public class KafkaTopicManagerAndProducer {
 
-    private static final String BOOTSTRAP_SERVERS = "4.245.192.219:9092,4.245.192.219:9093,4.245.192.219:9094";
+    //private static final String BOOTSTRAP_SERVERS = "4.245.192.219:9092,4.245.192.219:9093,4.245.192.219:9094";
+    private static final String BOOTSTRAP_SERVERS = "20.213.222.81:9094";
 
     public static void main(String[] args) throws Exception {
         String inputTopic = "transactions-in";

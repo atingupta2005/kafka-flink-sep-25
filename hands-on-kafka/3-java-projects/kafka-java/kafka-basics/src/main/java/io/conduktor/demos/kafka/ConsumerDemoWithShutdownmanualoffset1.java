@@ -25,7 +25,7 @@ public class ConsumerDemoWithShutdownmanualoffset1 {
         Properties properties = new Properties();
 
         // Kafka broker address
-        properties.setProperty("bootstrap.servers", "4.245.192.219:9092");
+        properties.setProperty("bootstrap.servers", "4.198.126.133:9094");
         // Deserializer classes for key/value
         properties.setProperty("key.deserializer", StringDeserializer.class.getName());
         properties.setProperty("value.deserializer", StringDeserializer.class.getName());

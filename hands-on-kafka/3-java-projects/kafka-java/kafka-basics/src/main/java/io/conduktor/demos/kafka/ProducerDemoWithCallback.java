@@ -21,7 +21,7 @@ public class ProducerDemoWithCallback {
         Properties properties = new Properties();
 
         // Specify the Kafka broker(s) address to connect to
-        properties.setProperty("bootstrap.servers", "4.245.192.219:9092");
+        properties.setProperty("bootstrap.servers", "4.198.126.133:9094");
 
         // Key serializer class to convert keys to byte arrays
         properties.setProperty("key.serializer", StringSerializer.class.getName());
@@ -56,7 +56,7 @@ public class ProducerDemoWithCallback {
         // Create the Kafka producer with the configured properties
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
 
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < 1000; j++) {
             for (int i = 0; i < 30; i++) {
                 // Create a producer record to send "hello world i" message to topic "demo_java"
                 ProducerRecord<String, String> producerRecord =
@@ -83,7 +83,7 @@ public class ProducerDemoWithCallback {
 
             try {
                 // Small pause between batches of messages
-                Thread.sleep(500);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
