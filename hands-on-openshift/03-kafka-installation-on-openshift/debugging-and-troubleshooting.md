@@ -26,7 +26,7 @@
 
 ### Can’t connect from kafka-cli pod
 
-* Ensure you used the **bootstrap service**: `my-cluster-kafka-bootstrap:9092`.
+* Ensure you used the **bootstrap service**: `ag-kafka-cluster-kafka-bootstrap:9092`.
 * If still failing, check that all controller and broker pods are running.
 
 ### Can’t connect from outside OpenShift

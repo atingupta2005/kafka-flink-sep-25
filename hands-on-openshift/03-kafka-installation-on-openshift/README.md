@@ -40,7 +40,7 @@ This guide shows how to install **Kafka 4.0 (KRaft mode)** on OpenShift using **
 kind: Kafka
 apiVersion: kafka.strimzi.io/v1beta2
 metadata:
-  name: my-cluster
+  name: ag-kafka-cluster
   annotations:
     strimzi.io/node-pools: enabled
     strimzi.io/kraft: enabled
@@ -89,7 +89,7 @@ kind: KafkaNodePool
 metadata:
   name: broker
   labels:
-    strimzi.io/cluster: my-cluster
+    strimzi.io/cluster: ag-kafka-cluster
 spec:
   replicas: 3
   roles:
@@ -116,7 +116,7 @@ kind: KafkaNodePool
 metadata:
   name: controller
   labels:
-    strimzi.io/cluster: my-cluster
+    strimzi.io/cluster: ag-kafka-cluster
 spec:
   replicas: 3
   roles:
@@ -153,7 +153,7 @@ spec:
 
 3. Go to **Networking → Services**.
 
-   * Check for `my-cluster-kafka-bootstrap` (internal access).
+   * Check for `ag-kafka-cluster-kafka-bootstrap` (internal access).
    * Check for the external service (type: LoadBalancer) on port 9094.
 
 ---

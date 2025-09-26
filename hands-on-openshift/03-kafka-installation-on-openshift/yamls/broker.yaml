@@ -3,7 +3,7 @@ kind: KafkaNodePool
 metadata:
   name: broker
   labels:
-    strimzi.io/cluster: my-cluster
+    strimzi.io/cluster: ag-kafka-cluster
 spec:
   replicas: 3
   roles:
