@@ -31,13 +31,13 @@
 1. In the Operator page → **Kafka → Create Kafka**.
 2. Switch to **YAML view** and paste:
 
-📄 **ag-kafka-cluster.yaml**
+📄 **kafka.yaml**
 
 ```yaml
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
-  name: ag-kafka-cluster
+  name: kafka
   namespace: kafka
   annotations:
     strimzi.io/node-pools: enabled
@@ -91,7 +91,7 @@ metadata:
   name: broker
   namespace: kafka
   labels:
-    strimzi.io/cluster: ag-kafka-cluster
+    strimzi.io/cluster: kafka
 spec:
   replicas: 3
   roles:
@@ -118,7 +118,7 @@ metadata:
   name: controller
   namespace: kafka
   labels:
-    strimzi.io/cluster: ag-kafka-cluster
+    strimzi.io/cluster: kafka
 spec:
   replicas: 3
   roles:
@@ -146,7 +146,7 @@ metadata:
   name: orders-topic
   namespace: kafka
   labels:
-    strimzi.io/cluster: ag-kafka-cluster
+    strimzi.io/cluster: kafka
 spec:
   partitions: 3
   replicas: 3
@@ -161,7 +161,7 @@ metadata:
   name: payments-topic
   namespace: kafka
   labels:
-    strimzi.io/cluster: ag-kafka-cluster
+    strimzi.io/cluster: kafka
 spec:
   partitions: 3
   replicas: 3
@@ -180,7 +180,7 @@ metadata:
   name: orders-app-user
   namespace: kafka
   labels:
-    strimzi.io/cluster: ag-kafka-cluster
+    strimzi.io/cluster: kafka
 spec:
   authentication:
     type: scram-sha-512
@@ -208,11 +208,12 @@ metadata:
   name: payments-app-user
   namespace: kafka
   labels:
-    strimzi.io/cluster: ag-kafka-cluster
+    strimzi.io/cluster: kafka
 spec:
   authentication:
     type: scram-sha-512
   authorization:
+    type: simple
     acls:
       - resource:
           type: topic
@@ -231,7 +232,7 @@ spec:
 ## 7. Apply Order (CLI)
 
 ```bash
-oc apply -f ag-kafka-cluster.yaml -n kafka
+oc apply -f kafka.yaml -n kafka
 oc apply -f broker-pool.yaml -n kafka
 oc apply -f controller-pool.yaml -n kafka
 oc apply -f orders-topic.yaml -n kafka
@@ -275,8 +276,8 @@ oc apply -f payments-user.yaml -n kafka
 
   Look for:
 
-  * `ag-kafka-cluster-kafka-bootstrap` (internal)
-  * `ag-kafka-cluster-kafka-extscram-bootstrap` (LoadBalancer, port 9094)
+  * `kafka-kafka-bootstrap` (internal)
+  * `kafka-kafka-extscram-bootstrap` (LoadBalancer, port 9094)
 
 ---
 
@@ -285,7 +286,7 @@ oc apply -f payments-user.yaml -n kafka
 * **Bootstrap address:**
 
   ```bash
-  oc -n kafka get svc ag-kafka-cluster-kafka-extscram-bootstrap
+  oc -n kafka get svc kafka-kafka-extscram-bootstrap
   ```
 
   → use `EXTERNAL-HOSTNAME:9094`
